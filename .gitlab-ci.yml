@@ -1,0 +1,26 @@
+pages: # used to activate GitLab pages
+  image: ipudk/debian-docs:v0.5.0
+  before_script:
+    - source activate py37
+    #- pip install -r docs/requirements.txt
+  script:
+    #- cd docs
+    - doxygen Doxyfile
+    #- make rinoh . _build/rinoh # Skip this if you need math
+    #- make latex
+    #- make latexpdf
+    - make html
+    # only the public directory is published
+    #- rm -rf ../public
+    #- cp -r ../html ../public
+    - mkdir -p "../public"
+    - cp -r _build/html "../public"
+  after_script:
+    - source deactivate
+  artifacts:
+    paths:
+    - public
+    - docs/_build
+    - docs/_doxy
+  #only:
+  #- master
