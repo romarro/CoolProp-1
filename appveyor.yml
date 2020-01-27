@@ -1,0 +1,50 @@
+# Tell appveyor to not use msbuild
+build: false
+
+environment:
+  matrix:
+    - PYTHON: 2.7
+    - PYTHON: 3.5
+    - PYTHON: 3.6
+    - PYTHON: 3.7
+    - PYTHON: 3.8
+
+platform:
+  - x86
+  - x64
+
+init:
+  - "ECHO %PYTHON% - %Platform%"
+
+install:
+  - ps: if($env:Platform -eq "x64") {SET PYTHON_ROOT=C:\Miniconda-x64}
+  - ps: if($env:Platform -eq "x86") {SET PYTHON_ROOT=C:\Miniconda}
+  - CALL "%PYTHON_ROOT%\\Scripts\\activate.bat"
+  - conda create -y -n condaenv python=%PYTHON% cython pip pywin32 unxutils requests jinja2 pyyaml pycrypto wheel
+  - conda activate condaenv
+  - ps: if($env:PYTHON -eq "2.7"){conda install -y ndg-httpsclient}
+
+# build_script:
+  # - cmd: |
+      # "%PYTHON%/python.exe" -m pip install --upgrade pip
+      # "%PYTHON%/python.exe" -m pip install --upgrade setuptools wheel numpy
+      # cd src
+      # "%PYTHON%/python.exe" setup.py build
+      # copy ..\bin\*.* ..\wheel\dbr\
+      # cd build\lib.win-*\
+      # copy *.* ..\..\..\wheel\dbr\
+      # cd ..\..\..\wheel\
+      # "%PYTHON%/python.exe" setup.py bdist_wheel
+# artifacts:
+  # - path: wrappers\Python\wheel\dist\*.whl
+    # name: wheels
+
+# deploy_script:
+  # - ps: |
+      # if($env:APPVEYOR_REPO_TAG -eq 'true') {
+        # Write-Output ("Uploading " + $env:APPVEYOR_REPO_TAG_NAME + " to PyPI...")
+        # &"${Env:PYTHON}/python.exe" -m pip install twine
+        # &"${Env:PYTHON}/python.exe" -m twine upload -u ${Env:USER} -p ${Env:PASS} --skip-existing dist/*.whl
+      # } else {
+        # Write-Output "No tag for deployment"
+      # }
