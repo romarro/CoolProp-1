@@ -10,19 +10,17 @@ environment:
     - PYTHON: 3.8
 
 platform:
-  - x86
+  #- x86
   - x64
 
 init:
   - "ECHO %PYTHON% - %Platform%"
 
 install:
-  - ps: if($env:Platform -eq "x64") {SET PYTHON_ROOT=C:\Miniconda-x64}
-  - ps: if($env:Platform -eq "x86") {SET PYTHON_ROOT=C:\Miniconda}
-  - CALL "%PYTHON_ROOT%\\Scripts\\activate.bat"
+  - CALL "C:\Miniconda\Scripts\activate.bat"
   - conda create -y -n condaenv python=%PYTHON% cython pip pywin32 unxutils requests jinja2 pyyaml pycrypto wheel
   - conda activate condaenv
-  - ps: if($env:PYTHON -eq "2.7"){conda install -y ndg-httpsclient}
+  #- ps: if($env:PYTHON -eq "2.7"){conda install -y ndg-httpsclient}
 
 # build_script:
   # - cmd: |
