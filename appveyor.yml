@@ -17,7 +17,8 @@ init:
   - "ECHO %PYTHON% - %Platform%"
 
 install:
-  - CALL "C:\Miniconda\Scripts\activate.bat"
+  - git submodule update --init --recursive
+  - CALL "C:\Miniconda37-x64\Scripts\activate.bat"
   - conda create -y -n condaenv python=%PYTHON% cython pip pywin32 requests jinja2 pyyaml pycrypto wheel
   - conda activate condaenv
   #- ps: if($env:PYTHON -eq "2.7"){conda install -y ndg-httpsclient}
