@@ -20,9 +20,9 @@ install:
   - git submodule update --init --recursive
   - ps: |
       If       ($env:Platform -eq "x86") {
-        CALL "C:\Miniconda37\Scripts\activate.bat"
+        "C:\Miniconda37\Scripts\activate.bat"
       } ElseIf ($env:Platform -eq "x64") {
-        CALL "C:\Miniconda37-x64\Scripts\activate.bat"
+        "C:\Miniconda37-x64\Scripts\activate.bat"
       } Else {
         Write-Output "Platform is not defined properly."
       }
