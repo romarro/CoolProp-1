@@ -46,62 +46,16 @@ build_script:
   - conda deactivate
 
 
-# install:
-  # - git submodule update --init --recursive
-  # - ps: |
-      # If       ($env:Platform -eq "x86") {
-        # & "C:\Miniconda37\Scripts\activate.bat"
-      # } ElseIf ($env:Platform -eq "x64") {
-        # & "C:\Miniconda37-x64\Scripts\activate.bat"
-      # } Else {
-        # Write-Output "Platform is not defined properly."
-      # }
-      # & "conda" create -y -n condaenv python=%PYTHON% cython pip pywin32 requests jinja2 pyyaml pycrypto wheel
-  # #- conda create -y -n condaenv python=%PYTHON% cython pip pywin32 requests jinja2 pyyaml pycrypto wheel
-  # #- conda activate condaenv
-  # #- ps: if($env:PYTHON -eq "2.7"){conda install -y ndg-httpsclient}
-
-# build_script:
-  # - CD wrappers\Python
-  # - ps: |
-      # If       ($env:Platform -eq "x86") {
-        # & "C:\Miniconda37\Scripts\activate.bat"
-      # } ElseIf ($env:Platform -eq "x64") {
-        # & "C:\Miniconda37-x64\Scripts\activate.bat"
-      # } Else {
-        # Write-Output "Platform is not defined properly."
-      # }
-      # & "python" generate_meta_info.py
-      # If       ($env:PYTHON -eq "2.7" -and $env:Platform -eq "x64") {
-        # & "python" setup.py bdist_wheel --dist-dir ../../install_root/Python bdist_wininst --dist-dir ../../install_root/Python --cmake-compiler vc9 --cmake-bitness 64
-      # } ElseIf ($env:PYTHON -eq "2.7" -and $env:Platform -eq "x86") {
-        # & "python" setup.py bdist_wheel --dist-dir ../../install_root/Python bdist_wininst --dist-dir ../../install_root/Python --cmake-compiler vc9 --cmake-bitness 32
-      # } Else {
-        # & "python" setup.py bdist_wheel --dist-dir ../../install_root/Python bdist_wininst --dist-dir ../../install_root/Python
-      # }
-      # & "python" setup.py clean
-
-# build_script:
-  # - cmd: |
-      # "%PYTHON%/python.exe" -m pip install --upgrade pip
-      # "%PYTHON%/python.exe" -m pip install --upgrade setuptools wheel numpy
-      # cd src
-      # "%PYTHON%/python.exe" setup.py build
-      # copy ..\bin\*.* ..\wheel\dbr\
-      # cd build\lib.win-*\
-      # copy *.* ..\..\..\wheel\dbr\
-      # cd ..\..\..\wheel\
-      # "%PYTHON%/python.exe" setup.py bdist_wheel
-# artifacts:
-  # - path: wrappers\Python\wheel\dist\*.whl
-    # name: wheels
-
-# deploy_script:
-  # - ps: |
-      # if($env:APPVEYOR_REPO_TAG -eq 'true') {
-        # Write-Output ("Uploading " + $env:APPVEYOR_REPO_TAG_NAME + " to PyPI...")
-        # &"${Env:PYTHON}/python.exe" -m pip install twine
-        # &"${Env:PYTHON}/python.exe" -m twine upload -u ${Env:USER} -p ${Env:PASS} --skip-existing dist/*.whl
-      # } else {
-        # Write-Output "No tag for deployment"
-      # }
+deploy:
+  - provider: BinTray
+    username: jowr
+    api_key:
+      secure: KNBl77nxs4FijM/Ycjf3GkX0UsLDZrD0loNMB3hWPZWCsRt/Wq5lVh+mbOlujLGO
+    subject: coolprop
+    repo: ci_binaries
+    package: Python
+    #version: version
+    #publish: false
+    #override: true
+    #explode: true
+    artifact: install_root/Python
