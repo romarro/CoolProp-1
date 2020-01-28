@@ -45,17 +45,23 @@ build_script:
   - python setup.py clean
   - conda deactivate
 
+deploy_script:
+  - DIR
+  - CD install_root
+  - DIR
+  - CD Python
+  - DIR
 
-deploy:
-  - provider: BinTray
-    username: jowr
-    api_key:
-      secure: KNBl77nxs4FijM/Ycjf3GkX0UsLDZrD0loNMB3hWPZWCsRt/Wq5lVh+mbOlujLGO
-    subject: coolprop
-    repo: ci_binaries
-    package: Python
-    #version: version
-    #publish: false
-    #override: true
-    #explode: true
-    artifact: install_root/Python
+# deploy:
+  # - provider: BinTray
+    # username: jowr
+    # api_key:
+      # secure: KNBl77nxs4FijM/Ycjf3GkX0UsLDZrD0loNMB3hWPZWCsRt/Wq5lVh+mbOlujLGO
+    # subject: coolprop
+    # repo: ci_binaries
+    # package: Python
+    # #version: version
+    # #publish: false
+    # #override: true
+    # #explode: true
+    # artifact: install_root/Python
