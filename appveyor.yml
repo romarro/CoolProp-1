@@ -15,9 +15,9 @@ platform:
 
 init:
   - "ECHO %PYTHON% - %Platform%"
-  - git submodule update --init --recursive
 
 install:
+  - git submodule update --init --recursive
   - IF "%Platform%"=="x86" ( CALL "C:\Miniconda37\Scripts\activate.bat" )
   - IF "%Platform%"=="x64" ( CALL "C:\Miniconda37-x64\Scripts\activate.bat" )
   - conda create -y -n condaenv python=%PYTHON% cython pip pywin32 requests jinja2 pyyaml pycrypto wheel
