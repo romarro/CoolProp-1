@@ -8,7 +8,7 @@ environment:
     - PYTHON_VERSION: 3.5
     - PYTHON_VERSION: 3.6
     - PYTHON_VERSION: 3.7
-    #- PYTHON_VERSION: 3.8
+    - PYTHON_VERSION: 3.8
 
 platform:
   - x86
@@ -27,7 +27,7 @@ install:
   - git submodule update --init --recursive
   - IF "%Platform%"=="x86" ( CALL "C:\Miniconda37\Scripts\activate.bat" )
   - IF "%Platform%"=="x64" ( CALL "C:\Miniconda37-x64\Scripts\activate.bat" )
-  - conda create -y -n condaenv python=%PYTHON_VERSION% cython pip pywin32 requests jinja2 pyyaml pycrypto wheel
+  - conda create -y -n condaenv python=%PYTHON_VERSION% cython pip requests jinja2 pyyaml wheel
   - conda activate condaenv
   - IF "%PYTHON_VERSION%"=="2.7" ( conda install -y ndg-httpsclient )
   - conda deactivate
