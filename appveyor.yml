@@ -20,9 +20,9 @@ init:
   - IF %PYTHON_MAJOR_VERSION% == 2 SET WIN_SDK_VERSION=v7.0
   - IF %PYTHON_MAJOR_VERSION% == 3 SET WIN_SDK_VERSION=v7.1
   - ECHO Configuring Windows SDK %WIN_SDK_VERSION% for Python %PYTHON_MAJOR_VERSION% on an %Platform% platform
-  - SET WIN_SDK_ROOT=C:\Program Files\Microsoft SDKs\Windows
-  - "%WIN_SDK_ROOT%\%WIN_SDK_VERSION%\Setup\WindowsSdkVer.exe" -q -version:%WIN_SDK_VERSION%
-  - "%WIN_SDK_ROOT%\%WIN_SDK_VERSION%\Bin\SetEnv.cmd" /%Platform% /release
+  - SET WIN_SDK_ROOT=C:\\Program Files\\Microsoft SDKs\\Windows
+  - "%WIN_SDK_ROOT%\\%WIN_SDK_VERSION%\\Setup\\WindowsSdkVer.exe" -q -version:%WIN_SDK_VERSION%
+  - "%WIN_SDK_ROOT%\\%WIN_SDK_VERSION%\\Bin\SetEnv.cmd" /%Platform% /release
 
 install:
   - git submodule update --init --recursive
