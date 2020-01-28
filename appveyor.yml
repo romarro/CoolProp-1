@@ -26,22 +26,30 @@ install:
       } Else {
         Write-Output "Platform is not defined properly."
       }
-  - conda create -y -n condaenv python=%PYTHON% cython pip pywin32 requests jinja2 pyyaml pycrypto wheel
-  - conda activate condaenv
+      & "conda" create -y -n condaenv python=%PYTHON% cython pip pywin32 requests jinja2 pyyaml pycrypto wheel
+  #- conda create -y -n condaenv python=%PYTHON% cython pip pywin32 requests jinja2 pyyaml pycrypto wheel
+  #- conda activate condaenv
   #- ps: if($env:PYTHON -eq "2.7"){conda install -y ndg-httpsclient}
 
 build_script:
   - CD wrappers\Python
-  - python generate_meta_info.py
   - ps: |
-      If       ($env:PYTHON -eq "2.7" -and $env:Platform -eq "x64") {
-        & python setup.py bdist_wheel --dist-dir ../../install_root/Python bdist_wininst --dist-dir ../../install_root/Python --cmake-compiler vc9 --cmake-bitness 64
-      } ElseIf ($env:PYTHON -eq "2.7" -and $env:Platform -eq "x86") {
-        & python setup.py bdist_wheel --dist-dir ../../install_root/Python bdist_wininst --dist-dir ../../install_root/Python --cmake-compiler vc9 --cmake-bitness 32
+      If       ($env:Platform -eq "x86") {
+        & "C:\Miniconda37\Scripts\activate.bat"
+      } ElseIf ($env:Platform -eq "x64") {
+        & "C:\Miniconda37-x64\Scripts\activate.bat"
       } Else {
-        & python setup.py bdist_wheel --dist-dir ../../install_root/Python bdist_wininst --dist-dir ../../install_root/Python
+        Write-Output "Platform is not defined properly."
       }
-  - python setup.py clean
+      & "python" generate_meta_info.py
+      If       ($env:PYTHON -eq "2.7" -and $env:Platform -eq "x64") {
+        & "python" setup.py bdist_wheel --dist-dir ../../install_root/Python bdist_wininst --dist-dir ../../install_root/Python --cmake-compiler vc9 --cmake-bitness 64
+      } ElseIf ($env:PYTHON -eq "2.7" -and $env:Platform -eq "x86") {
+        & "python" setup.py bdist_wheel --dist-dir ../../install_root/Python bdist_wininst --dist-dir ../../install_root/Python --cmake-compiler vc9 --cmake-bitness 32
+      } Else {
+        & "python" setup.py bdist_wheel --dist-dir ../../install_root/Python bdist_wininst --dist-dir ../../install_root/Python
+      }
+      & "python" setup.py clean
 
 # build_script:
   # - cmd: |
