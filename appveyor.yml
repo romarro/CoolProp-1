@@ -3,26 +3,33 @@ build: false
 
 environment:
   matrix:
-    #- PYTHON: 2.7
-    - PYTHON: 3.5
-    - PYTHON: 3.6
-    - PYTHON: 3.7
-    #- PYTHON: 3.8
+    - PYTHON_VERSION: 2.7
+    - PYTHON_VERSION: 3.5
+    - PYTHON_VERSION: 3.6
+    - PYTHON_VERSION: 3.7
+    #- PYTHON_VERSION: 3.8
 
 platform:
   #- x86
   - x64
 
 init:
-  - "ECHO %PYTHON% - %Platform%"
+  - ECHO %PYTHON_VERSION% - %Platform%
+  - SET MAJOR_PYTHON_VERSION=%PYTHON_VERSION:~0,1%
+  - IF %MAJOR_PYTHON_VERSION% == 2 ( SET WINDOWS_SDK_VERSION="v7.0" )
+  - IF %MAJOR_PYTHON_VERSION% == 3 ( SET WINDOWS_SDK_VERSION="v7.1" )
+  - ECHO Configuring Windows SDK %WINDOWS_SDK_VERSION% for Python %MAJOR_PYTHON_VERSION% on a %Platform% platform
+  - SET WIN_SDK_ROOT=C:\Program Files\Microsoft SDKs\Windows
+  - "%WIN_SDK_ROOT%\%WINDOWS_SDK_VERSION%\Setup\WindowsSdkVer.exe" -q -version:%WINDOWS_SDK_VERSION%
+  - "%WIN_SDK_ROOT%\%WINDOWS_SDK_VERSION%\Bin\SetEnv.cmd" /%Platform% /release
 
 install:
   - git submodule update --init --recursive
   - IF "%Platform%"=="x86" ( CALL "C:\Miniconda37\Scripts\activate.bat" )
   - IF "%Platform%"=="x64" ( CALL "C:\Miniconda37-x64\Scripts\activate.bat" )
-  - conda create -y -n condaenv python=%PYTHON% cython pip pywin32 requests jinja2 pyyaml pycrypto wheel
+  - conda create -y -n condaenv python=%PYTHON_VERSION% cython pip pywin32 requests jinja2 pyyaml pycrypto wheel
   - conda activate condaenv
-  - IF "%PYTHON%"=="2.7" ( conda install -y ndg-httpsclient )
+  - IF "%PYTHON_VERSION%"=="2.7" ( conda install -y ndg-httpsclient )
   - conda deactivate
 
 build_script:
@@ -31,9 +38,9 @@ build_script:
   - IF "%Platform%"=="x64" ( CALL "C:\Miniconda37-x64\Scripts\activate.bat" )
   - conda activate condaenv
   - python generate_meta_info.py
-  - IF "%Platform%"=="x86" IF "%PYTHON%"=="2.7" ( python setup.py bdist_wheel --dist-dir ../../install_root/Python bdist_wininst --dist-dir ../../install_root/Python --cmake-compiler vc9 --cmake-bitness 32 )
-  - IF "%Platform%"=="x64" IF "%PYTHON%"=="2.7" ( python setup.py bdist_wheel --dist-dir ../../install_root/Python bdist_wininst --dist-dir ../../install_root/Python --cmake-compiler vc9 --cmake-bitness 64 )
-  - IF NOT "%PYTHON%"=="2.7"                    ( python setup.py bdist_wheel --dist-dir ../../install_root/Python bdist_wininst --dist-dir ../../install_root/Python )
+  - IF "%Platform%"=="x86" IF "%PYTHON_VERSION%"=="2.7" ( python setup.py bdist_wheel --dist-dir ../../install_root/Python bdist_wininst --dist-dir ../../install_root/Python --cmake-compiler vc9 --cmake-bitness 32 )
+  - IF "%Platform%"=="x64" IF "%PYTHON_VERSION%"=="2.7" ( python setup.py bdist_wheel --dist-dir ../../install_root/Python bdist_wininst --dist-dir ../../install_root/Python --cmake-compiler vc9 --cmake-bitness 64 )
+  - IF NOT "%PYTHON_VERSION%"=="2.7"                    ( python setup.py bdist_wheel --dist-dir ../../install_root/Python bdist_wininst --dist-dir ../../install_root/Python )
   - python setup.py clean
   - conda deactivate
 
