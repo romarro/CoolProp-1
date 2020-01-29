@@ -45,6 +45,37 @@ matrix:
     #  script:     
     #    - cmake --build build --config Release
     #    - ./build/Main
+    
+    - os:windows
+      env:
+        - PYTHON_VERSION=3.6
+      branches:
+        except:
+          - coverity_scan
+      before_script:
+        - cmake --version
+        #- wget https://repo.continuum.io/miniconda/Miniconda2-latest-Windows-x86.exe -O miniconda.sh;
+        - wget https://repo.continuum.io/miniconda/Miniconda3-latest-Windows-x86_64.exe -O miniconda.exe;
+        - miniconda.exe /S /D=C:\\Miniconda
+        - export PATH=C:\\Miniconda\\Scripts:$PATH
+        - conda create -y -n condaenv python=${PYTHON_VERSION} cython pip requests jinja2 pyyaml wheel
+      script:
+        - source activate condaenv
+        - pushd wrappers\Python
+        - python generate_meta_info.py
+        - python setup.py bdist_wheel --dist-dir ../../install_root/Python bdist_wininst --dist-dir ../../install_root/Python
+        - python setup.py clean
+        - conda deactivate
+        - ls -lh ../../install_root/Python
+        - popd
+      #deploy:
+      #  provider: bintray
+      #  file: "Path to a descriptor file, containing information for the Bintray upload"
+      #  user: "Bintray user"
+      #  key: "Bintray API key"
+      #  passphrase: "Optional. In case a passphrase is configured on Bintray and GPG signing is used"
+      #  dry-run: "Optional. If true, skips sending requests to Bintray. Useful for testing your configuration"
+    
     - os: linux
       dist: bionic
       compiler: gcc
