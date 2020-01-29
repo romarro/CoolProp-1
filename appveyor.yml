@@ -52,10 +52,9 @@ build_script:
   # - CD Python
   # - DIR
 
-#artifacts:
-  # pushing all *.nupkg files in build directory recursively
-  #- path: '..\..\install_root\Python\*.whl'
-  #  name: pythonwheels
+artifacts:
+  - path: '..\..\install_root\Python\*.whl'
+    name: pythonwheels
 
 deploy:
   - provider: BinTray
@@ -69,4 +68,4 @@ deploy:
     #publish: false
     #override: true
     #explode: true
-    artifact: '..\..\install_root\Python\*.whl'
+    artifact: pythonwheels
