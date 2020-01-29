@@ -53,7 +53,7 @@ build_script:
   # - DIR
 
 artifacts:
-  - path: '..\..\install_root\Python\*.whl'
+  - path: 'install_root\Python\*.whl'
     name: pythonwheels
 
 deploy:
