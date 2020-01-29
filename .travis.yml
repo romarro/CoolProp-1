@@ -45,8 +45,8 @@ matrix:
     #  script:     
     #    - cmake --build build --config Release
     #    - ./build/Main
-    
-    - os:windows
+    #
+    - os: windows
       env:
         - PYTHON_VERSION=3.6
       branches:
@@ -75,7 +75,6 @@ matrix:
       #  key: "Bintray API key"
       #  passphrase: "Optional. In case a passphrase is configured on Bintray and GPG signing is used"
       #  dry-run: "Optional. If true, skips sending requests to Bintray. Useful for testing your configuration"
-    
     - os: linux
       dist: bionic
       compiler: gcc
