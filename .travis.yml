@@ -55,8 +55,8 @@ matrix:
       before_script:
         - cmake --version
         #- wget https://repo.continuum.io/miniconda/Miniconda2-latest-Windows-x86.exe -O miniconda.sh;
-        - wget https://repo.continuum.io/miniconda/Miniconda3-latest-Windows-x86_64.exe -O miniconda.exe;
-        - miniconda.exe /S /D=C:\\Miniconda
+        - wget https://repo.continuum.io/miniconda/Miniconda3-latest-Windows-x86_64.exe -O miniconda.exe
+        - ./miniconda /S /D=C:\\Miniconda
         - export PATH=C:\\Miniconda\\Scripts:$PATH
         - conda create -y -n condaenv python=${PYTHON_VERSION} cython pip requests jinja2 pyyaml wheel
       script:
