@@ -47,7 +47,7 @@ build_script:
 
 deploy_script:
   - DIR
-  - CD install_root
+  - CD ../../install_root
   - DIR
   - CD Python
   - DIR
