@@ -66,6 +66,6 @@ deploy:
     package: Python
     #version: version
     #publish: false
-    #override: true
+    override: true
     #explode: true
     artifact: pythonwheels
