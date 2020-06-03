@@ -73,7 +73,7 @@ jobs:
         docker rm manylinux
         popd
     - name: Upload wheels
-    - uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v2
       with:
         name: PythonLinuxWheels
         #path: path/**/[abc]rtifac?/*
