@@ -32,7 +32,7 @@ jobs:
       # The CMake binaries on the Github Actions machines are (as of this writing) 3.12
       # run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=$BUILD_TYPE
       # Just a single line for modern CMake
-      run: cmake -S$GITHUB_WORKSPACE -Bbuild -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DCOOLPROP_SHARED_LIBRARY=ON
+      run: cmake -S$GITHUB_WORKSPACE -B${{runner.workspace}}/build -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DCOOLPROP_SHARED_LIBRARY=ON
 
     - name: Build
       working-directory: ${{runner.workspace}}/build
