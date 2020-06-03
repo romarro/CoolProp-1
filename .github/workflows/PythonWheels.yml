@@ -113,9 +113,9 @@ jobs:
       #  pip install flake8 pytest
       #  if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
       run: |
-        echo pip install --upgrade pip
-        pip install flake8 pytest
-        pip install cython requests jinja2 pyyaml pycrypto wheel
+        pip install --user --upgrade pip
+        pip install --user flake8 pytest
+        pip install --user cython requests jinja2 wheel
       
     #- name: Lint with flake8
     #  shell: bash
