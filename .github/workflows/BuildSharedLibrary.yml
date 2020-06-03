@@ -17,10 +17,10 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    - name: Create Build Environment
-      # Some projects don't allow in-source building, so create a separate build directory
-      # We'll use this as our working directory for all subsequent commands
-      run: cmake -E make_directory ${{runner.workspace}}/build
+    #- name: Create Build Environment
+    #  # Some projects don't allow in-source building, so create a separate build directory
+    #  # We'll use this as our working directory for all subsequent commands
+    #  run: cmake -E make_directory ${{runner.workspace}}/build
 
     - name: Configure CMake
       # Use a bash shell so we can use the same syntax for environment variable
@@ -32,7 +32,7 @@ jobs:
       # The CMake binaries on the Github Actions machines are (as of this writing) 3.12
       # run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=$BUILD_TYPE
       # Just a single line for modern CMake
-      run: cmake -S$GITHUB_WORKSPACE -B${{runner.workspace}}/build -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DCOOLPROP_SHARED_LIBRARY=ON
+      run: cmake -S$GITHUB_WORKSPACE -Bbuild -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DCOOLPROP_SHARED_LIBRARY=ON
 
     - name: Build
       working-directory: ${{runner.workspace}}/build
