@@ -61,4 +61,6 @@ jobs:
       shell: bash
       working-directory: "wrappers/Python"
       run: |
+        python generate_meta_info.py
         python setup.py install
+        python setup.py clean
