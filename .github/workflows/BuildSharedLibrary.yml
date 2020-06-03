@@ -35,10 +35,10 @@ jobs:
       run: cmake -S$GITHUB_WORKSPACE -B${{runner.workspace}}/build -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DCOOLPROP_SHARED_LIBRARY=ON
 
     - name: Build
-      working-directory: ${{runner.workspace}}/build
+      #working-directory: ${{runner.workspace}}/build
       shell: bash
       # Execute the build.  You can specify a specific target with "--target <NAME>"
-      run: cmake --build . --config $BUILD_TYPE
+      run: cmake --build ${{runner.workspace}}/build --target install --config $BUILD_TYPE
 
     #- name: Test
     #  working-directory: ${{runner.workspace}}/build
