@@ -1,0 +1,74 @@
+
+name: PythonWheels
+
+on: [push]
+
+#on:
+#  push:
+#    branches: [ master ]
+#  pull_request:
+#    branches: [ master ]
+
+jobs:
+  build:
+
+    runs-on: ${{ matrix.os }}
+    #strategy:
+    #  matrix:
+    #    os: [windows-latest, ubuntu-latest, macOS-latest]
+    #    python-version: [3.5, 3.6, 3.7, 3.8]
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        python-version: [3.8]
+        bitness: [32, 64]
+
+    steps:
+    - name: Checkout from git
+      uses: actions/checkout@v2
+      with:
+        submodules: recursive
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+    #- name: Build the package
+    #  shell: bash
+    #  working-directory: "wrappers/Python/manylinux"
+    #  run: |
+    #    chmod +x 00_prepare_docker.sh
+    #    ./00_prepare_docker.sh 64
+    - name: Build the package
+      shell: bash
+      working-directory: "wrappers/Python/manylinux"
+      run: |
+        BITNESS=${{ matrix.bitness }}
+        if [[ "$BITNESS" == "64" ]] 
+        then
+            DOCKER_IMG_NAME="coolprop/manylinux"
+            SETUP_PY_ARGS="cmake=default,64"
+        elif [[ "$BITNESS" == "32" ]] 
+        then
+            DOCKER_IMG_NAME="coolprop/manylinux32"
+            SETUP_PY_ARGS="cmake=default,32"
+        else
+            echo "Received an unknown argument, aborting."
+            exit 1
+        fi
+        DOCKER_MACHINE_TAG="v2.1.0"
+        # Get the directory containing this script
+        # see http://stackoverflow.com/a/246128/1360263
+        CUR_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+        # Go up three directories
+        pushd ${CUR_DIR}/../../..
+        # Run the build script
+        chmod +x ${CUR_DIR}/01_build_wheels.sh
+        # Remove the manylinux container if it didn't complete properly last time (see also https://stackoverflow.com/a/38225298/1360263)
+        docker stop manylinux || true && docker rm manylinux || true
+        docker run -itd --name manylinux ${DOCKER_IMG_NAME}:${DOCKER_MACHINE_TAG} bash
+        docker cp . manylinux:/io
+        docker exec manylinux /io/wrappers/Python/manylinux/01_build_wheels.sh ${SETUP_PY_ARGS}
+        docker cp manylinux:/io/install_root install_root
+        docker stop manylinux 
+        docker rm manylinux
+        popd
