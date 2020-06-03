@@ -14,9 +14,10 @@ on: [push]
 jobs:
   build:
 
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
+        os: [windows-latest, ubuntu-latest, macOS-latest]
         python-version: [3.5, 3.6, 3.7, 3.8]
 
     steps:
@@ -40,14 +41,20 @@ jobs:
         pip install flake8 pytest
         pip install cython requests jinja2 pyyaml pycrypto wheel
       
-    - name: Lint with flake8
-      shell: bash
-      working-directory: "wrappers/Python"
-      run: |
-        # stop the build if there are Python syntax errors or undefined names
-        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-        # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
-        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+    #- name: Lint with flake8
+    #  shell: bash
+    #  working-directory: "wrappers/Python"
+    #  run: |
+    #    # stop the build if there are Python syntax errors or undefined names
+    #    flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+    #    # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
+    #    flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     #- name: Test with pytest
     #  run: |
     #    pytest
+    
+    - name: Build the package
+      shell: bash
+      working-directory: "wrappers/Python"
+      run: |
+        python setup.py install
