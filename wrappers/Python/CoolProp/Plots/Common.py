@@ -773,8 +773,8 @@ class BasePlot(Base2DObject):
     def limits(self, value):
         if is_string(value):
             value = value.upper()
-        if value in self.TP_LIMITS:
-            self._limits = self.TP_LIMITS[value]
+            if value in self.TP_LIMITS:
+                self._limits = self.TP_LIMITS[value]
         elif len(value) == 4:
             self._limits = value
         else:
